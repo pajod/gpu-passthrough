@@ -7,7 +7,7 @@ research into the topic. Any external sources will be denoted using a
 superscript that links to the source. Anyone is welcome to contribute to this
 project if they feel that they can do so.
 
-This tutorial has been tested using a [ZOTAC GeForce&reg; GTX 1060 Mini] ([vBIOS ROM])
+This tutorial has been tested using a [ZOTAC GeForce&reg; GTX 1060 Mini 6GB] ([vBIOS ROM])
  on both Intel and AMD platforms:
 
 | AMD                                 | Intel                             |
@@ -684,5 +684,5 @@ devices which are part of the CPU.
 [passthrough devices]: #passthrough-devices
 [Red Hat]: https://access.redhat.com/documentation/en-us/red_hat_virtualization/4.2/html/installation_guide/appe-configuring_a_hypervisor_host_for_pci_passthrough
 [resources/example-domain.xml]: resources/example-domain.xml
-[ZOTAC GeForce&reg; GTX 1060 Mini]: https://www.zotac.com/us/product/graphics_card/zotac-geforce-gtx-1060-mini
+[ZOTAC GeForce&reg; GTX 1060 Mini 6GB]: https://www.zotac.com/us/product/graphics_card/zotac-geforce-gtx-1060-mini
 [vBIOS ROM]: https://www.techpowerup.com/vgabios/195469/zotac-gtx1060-6144-170630
