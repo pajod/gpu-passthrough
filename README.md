@@ -669,8 +669,8 @@ devices which are part of the CPU.
 [AMD&reg; I/O Virtualization Technology (IOMMU)]: https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf
 [ArchWiki]: https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF
 [ASRock&reg; H97M Anniversary]: https://www.asrock.com/mb/Intel/H97M%20Anniversary
-[ASUS ROG STRIX B450-I]: https://www.asus.com/en/Motherboards/ROG-STRIX-B450-I-GAMING/
-[AMD Ryzen 5 2600X]: https://www.amd.com/en/products/cpu/amd-ryzen-5-2600x
+[ASUS&reg; ROG&reg; STRIX B450-I]: https://www.asus.com/en/Motherboards/ROG-STRIX-B450-I-GAMING/
+[AMD Ryzen&trade; 5 2600X]: https://www.amd.com/en/products/cpu/amd-ryzen-5-2600x
 [BDF identifier]: #bdf-identifier
 [Code 43]: #code-43
 [cpu-model-comparison]: resources/cpu-model-comparison.png
