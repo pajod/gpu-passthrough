@@ -7,15 +7,15 @@ research into the topic. Any external sources will be denoted using a
 superscript that links to the source. Anyone is welcome to contribute to this
 project if they feel that they can do so.
 
-For the purposes of this tutorial, I'm using an [ASRock&reg; H97M Anniversary]
-motherboard paired with an [Intel&reg; Xeon&reg; E3-1246 v3]. The graphics card
-that I'm using is a [ZOTAC GeForce&reg; GTX 1060 Mini] ([vBIOS ROM]). All
-snippets will be in context of Ubuntu 18.04.1 LTS Server.
+This tutorial has been tested using a [ZOTAC GeForce&reg; GTX 1060 Mini] ([vBIOS ROM])
+ on both Intel and AMD platforms:
 
-Since I don't have any compatible AMD&reg;-based hardware for testing, I can
-only provide in-depth support for Intel&reg;-based builds. However, the steps
-outlined in this publication should very accurately reflect the workflow
-required for AMD&reg;-based systems.
+| AMD                                 | Intel                             |
+|-------------------------------------|-----------------------------------|
+| [ASUS&reg; ROG&reg; STRIX B450-I]   | [ASRock&reg; H97M Anniversary]    |
+| [AMD Ryzen&trade; 5 2600X]          | [Intel&reg; Xeon&reg; E3-1246 v3] |
+
+All snippets will be in context of Ubuntu 18.04.1 LTS Server.
 
 *This tutorial is available in [ePUB format].*
 
@@ -70,25 +70,23 @@ Several quirks will present themselves during configuration and each one must be
 overcome in order to complete all of our stated goals:
 
 1. The graphics card will be utilized by the hypervisor to display its operating
-   system console by default. This will block any attempt to detatch the
-   graphics card from the hypervisor and subsequently attach it to the virtual
-   machine. In order to fix this issue, the graphics card's hardware ID pair
-   must be blacklisted on the hypervisor so that it will be unused until it is
-   attached to the virtual machine.
+   system console by default. The card cannot be attached to the hypervisor and
+   guest simultaneously, so it should be be blacklisted on the hypervisor so that
+   it will be unused until it is attached to the virtual machine.
 2. Now that the graphics card has been blacklisted, how will the hypervisor
    display its operating system console? We will need to make sure that the
-   device blacklisting process does not adversely affect the use of any
-   secondary graphics card to be used by the hypervisor. In order to satisfy
-   this constraint, it is recommended at the very least to have a graphics
+   device blacklisting process does not prevent us from accessing the the
+   hypervisor. In order to satisfy this constraint,
+   it is recommended at the very least to have a graphics
    solution with a different [hardware identifier]. Integrated graphics is a
    great bang-for-the-buck option.
-3. The graphics card's ROM image will become tainted after successive
+3. The graphics card's ROM image may become tainted after successive
    initialization(s), preventing clean restarts of the virtual machine. This can
    be fixed by performing a clean reboot of the hypervisor after the target
    device has been blacklisted and imaging its ROM to a file before first use.
    The resulting image will be loaded in the virtual machine instead of mapping
    the ROM directly from the device.
-4. The drivers for the unsupported graphics card will report an error (Code 43)
+4. The drivers for the unsupported graphics card will report an error ([Code 43])
    when booting the guest operating system. This must be overcome by
    masquerading the hardware of the virtual machine to match the host computer
    as closely as possible so that the graphics card's drivers do not suspect
@@ -119,8 +117,8 @@ support [Intel&reg; Virtualization Technology (VT-x)] and
 - It is *recommended* that your motherboard and CPU also support integrated
 graphics. The hypervisor will need a way to display the console and the cheapest
 way to do this is to ensure that you have integrated graphics support. The
-alternative to this would be having a separate discrete GPU (if you have an
-available PCI-e slot).
+alternatives to this would be having a separate discrete GPU (if you have an
+available PCI-e slot) or accessing the hypervisor remotely via ssh.
 
 With all of this in mind, the issue of IOMMU group isolation may still remain;
 if some or all of your motherboard's PCI-e ports are too tightly associated with
@@ -134,8 +132,12 @@ detail.
 The first step to facilitating PCI-e passthrough of any kind is enabling
 virtualization acceleration and IOMMU in your motherboard's BIOS settings.
 Consult your motherboard manual to find options relating to AMD-V&trade;,
-AMD-Vi, VT-d, VT-x or anything else with virtualization-related keywords and
-enable those options.
+AMD-Vi, SVM, VT-d, VT-x or anything else with virtualization-related keywords
+and enable those options.
+
+After rebooting to save your settings, completely power off the machine at
+ least once, as some BIOS settings do not or not fully take effect during
+ regular reboots.
 
 Next, we need to enable support for IOMMU in the Linux kernel. Assuming that you
 use GRUB as your boot loader, we need to append one of the following strings to
@@ -224,7 +226,7 @@ locate and blacklist all [passthrough devices] in the hypervisor's kernel.
 **Before blacklisting the GPU in the hypervisor's kernel, make sure that a
 secondary graphics device is installed with a different [hardware identifier],
 whether integrated or discrete, so that the hypervisor can still display its
-operating system's console.**
+operating system's console.** This is optional if you have reliable remote access.
 
 ### Locating the GPU
 
@@ -639,6 +641,10 @@ devices which are the target of PCI-e passthrough and each neighboring device
 within their respective IOMMU groups. This set should exclude any "PCI bridge"
 devices which are part of the CPU.
 
+<a name="code-43">**Code 43**</a>&mdash; The generic error condition displayed in
+ Windows device manager for instances where the NVIDIA&trade; driver fails or refuses
+ to initialize the passed graphics card.
+
 [Introduction]: #introduction
 [License]: #license
 [Preamble]: #preamble
@@ -663,7 +669,10 @@ devices which are part of the CPU.
 [AMD&reg; I/O Virtualization Technology (IOMMU)]: https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf
 [ArchWiki]: https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF
 [ASRock&reg; H97M Anniversary]: https://www.asrock.com/mb/Intel/H97M%20Anniversary
+[ASUS ROG STRIX B450-I]: https://www.asus.com/en/Motherboards/ROG-STRIX-B450-I-GAMING/
+[AMD Ryzen 5 2600X]: https://www.amd.com/en/products/cpu/amd-ryzen-5-2600x
 [BDF identifier]: #bdf-identifier
+[Code 43]: #code-43
 [cpu-model-comparison]: resources/cpu-model-comparison.png
 [ePUB format]: resources/gpu-passthrough.epub
 [hardware identifier]: #hardware-identifier
